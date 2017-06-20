@@ -1,9 +1,7 @@
 # Project Euler
 # Problem 12
 # Highly divisible triangular number
-import sys, math
-
-primes = [2, 3, 7]
+primes = [2, 3, 5, 7]
 
 def isPrime(number):
 	if number == 1 or (number % 2 == 0 and number != 2):
@@ -17,28 +15,41 @@ def isPrime(number):
 			return False
 	return True
 
-def nextPrime(curr):
-	number = curr + 1
+def nextPrime():
+	number = primes[-1] + 2
+	
 	while not isPrime(number):
 		number += 2
 
-	primes.insert(number)
+	primes.append(number)
 
-def numberDivisors(number): # re do
-	count = 0
+def numberDivisors(number):
+	if number == 0:
+		return 0
+	elif number == 1:
+		return 1
+
+	index = 0
+	count, currCount = 1, 1
+	
 	curr = number
-	for i in primes:
-		curr = number / i
 
-	# count, factor = 0, 1
-	# if number % 2 != 0:
-	# 	factor = 2
+	while curr != 1:
+		prime = primes[index]
 
-	# for i in range(1, (number / 2) + 1, factor):
-	# 	if (number % i == 0):
-	# 		count += 1
-	# if number > 0:
-	# 	count += 1
+		if (curr % prime == 0):
+			curr /= prime
+
+			currCount += 1
+		else:
+			count *= currCount
+			currCount = 1
+			index +=1
+			if len(primes) <= index:
+				nextPrime()
+
+	count *= currCount
+
 	return count
 
 def hdtn(n):
@@ -56,6 +67,4 @@ def hdtn(n):
 
 	print "Divisors: " + str(divisors) + " triangle: " + str(triangle) + " n: " + str(n) + " i: " + str(i)
 
-# hdtn(int(sys.argv[1]))
-print numberDivisors(24)
-# print isPrime(int(sys.argv[1]))
+hdtn(500)
